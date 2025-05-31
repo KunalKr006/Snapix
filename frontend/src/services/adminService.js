@@ -6,7 +6,7 @@ import api from './api';
  */
 export const getDashboardStats = async () => {
   try {
-    const response = await api.get('/admin/stats');
+    const response = await api.get('/api/admin/dashboard');
     return response.data;
   } catch (error) {
     console.error('Error fetching dashboard statistics:', error);
