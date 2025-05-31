@@ -2,7 +2,7 @@ import api from './api';
 
 export const getWallpapers = async (category = '', search = '') => {
   try {
-    const response = await api.get('/wallpapers', {
+    const response = await api.get('/api/wallpapers', {
       params: { category, search }
     });
     return response.data;
@@ -14,7 +14,7 @@ export const getWallpapers = async (category = '', search = '') => {
 
 export const getWallpaper = async (id) => {
   try {
-    const response = await api.get(`/wallpapers/${id}`);
+    const response = await api.get(`/api/wallpapers/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching wallpaper:', error);
@@ -28,14 +28,14 @@ export const uploadWallpaper = async (formData, isUpdate = false) => {
     if (isUpdate) {
       // Extract the ID from form data for update request
       const id = formData.get('id');
-      response = await api.put(`/wallpapers/${id}`, formData, {
+      response = await api.put(`/api/wallpapers/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
     } else {
       // Regular upload for new wallpaper
-      response = await api.post('/wallpapers', formData, {
+      response = await api.post('/api/wallpapers', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -50,7 +50,7 @@ export const uploadWallpaper = async (formData, isUpdate = false) => {
 
 export const deleteWallpaper = async (id) => {
   try {
-    await api.delete(`/wallpapers/${id}`);
+    await api.delete(`/api/wallpapers/${id}`);
     return { success: true };
   } catch (error) {
     console.error('Error deleting wallpaper:', error);
@@ -61,7 +61,7 @@ export const deleteWallpaper = async (id) => {
 export const addToWishlist = async (wallpaperId) => {
   try {
     console.log('Adding to wishlist:', wallpaperId);
-    const response = await api.post(`/wallpapers/${wallpaperId}/wishlist`);
+    const response = await api.post(`/api/wallpapers/${wallpaperId}/wishlist`);
     console.log('Add to wishlist response:', response.data);
     return response.data;
   } catch (error) {
@@ -76,7 +76,7 @@ export const addToWishlist = async (wallpaperId) => {
 export const removeFromWishlist = async (wallpaperId) => {
   try {
     console.log('Removing from wishlist:', wallpaperId);
-    const response = await api.delete(`/wallpapers/${wallpaperId}/wishlist`);
+    const response = await api.delete(`/api/wallpapers/${wallpaperId}/wishlist`);
     console.log('Remove from wishlist response:', response.data);
     return response.data;
   } catch (error) {
