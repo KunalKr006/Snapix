@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   // Function to fetch user data
   const fetchUserData = async () => {
     try {
-      const res = await api.get('/auth/me');
+      const res = await api.get('/api/auth/me');
       console.log('Fetched user data:', res.data);
       setUser(res.data);
     } catch (error) {
