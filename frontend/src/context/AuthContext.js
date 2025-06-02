@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     try {
       console.log('Attempting registration with:', { username, email });
-      const res = await api.post('/auth/register', { username, email, password });
+      const res = await api.post('api/auth/register', { username, email, password });
       console.log('Registration response:', res.data);
       
       const { token, user } = res.data;
