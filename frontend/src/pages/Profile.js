@@ -94,7 +94,7 @@ const Profile = () => {
       
       // Track download in backend
       try {
-        await api.post(`/wallpapers/${wallpaperId}/download`);
+        await api.post(`/api/wallpapers/${wallpaperId}/download`);
       } catch (error) {
         console.error('Failed to track download:', error);
         // Continue with download even if tracking fails

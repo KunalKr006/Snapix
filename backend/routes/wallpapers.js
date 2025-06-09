@@ -99,6 +99,55 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
   }
 });
 
+// Update wallpaper (admin only)
+router.put('/:id', auth, upload.single('image'), async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Not authorized' });
+    }
+
+    const wallpaper = await Wallpaper.findById(req.params.id);
+    if (!wallpaper) {
+      return res.status(404).json({ message: 'Wallpaper not found' });
+    }
+
+    // Update basic fields
+    wallpaper.title = req.body.title;
+    wallpaper.description = req.body.description;
+    wallpaper.category = req.body.category;
+
+    // If a new image is provided, upload it to Cloudinary
+    if (req.file) {
+      // Convert buffer to base64
+      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
+      // Upload new image to Cloudinary
+      const result = await cloudinary.uploader.upload(base64Image, {
+        folder: 'snapix',
+        resource_type: 'auto'
+      });
+
+      // Delete old image from Cloudinary if it exists
+      if (wallpaper.imageUrl) {
+        const oldPublicId = wallpaper.imageUrl.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(`snapix/${oldPublicId}`);
+      }
+
+      // Update image URL
+      wallpaper.imageUrl = result.secure_url;
+    }
+
+    await wallpaper.save();
+    res.json(wallpaper);
+  } catch (error) {
+    console.error('Update error:', error);
+    res.status(500).json({ 
+      message: 'Error updating wallpaper',
+      error: error.message 
+    });
+  }
+});
+
 // Delete wallpaper (admin only)
 router.delete('/:id', auth, async (req, res) => {
   try {
@@ -176,40 +225,31 @@ router.delete('/:id/wishlist', auth, async (req, res) => {
   }
 });
 
-// Track download
+// Track wallpaper download
 router.post('/:id/download', async (req, res) => {
   try {
-    const wallpaperId = req.params.id;
-    
-    // Find the wallpaper
-    const wallpaper = await Wallpaper.findById(wallpaperId);
+    const wallpaper = await Wallpaper.findById(req.params.id);
     if (!wallpaper) {
       return res.status(404).json({ message: 'Wallpaper not found' });
     }
-    
-    // Get user info if authenticated
-    const userId = req.user ? req.user.id : null;
-    
-    // Get IP address
-    const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    
+
     // Create download record
     const download = new Download({
-      wallpaper: wallpaperId,
-      user: userId,
-      ipAddress
+      wallpaper: wallpaper._id,
+      user: req.user ? req.user.id : null, // If user is logged in, track their ID
+      ipAddress: req.ip || req.connection.remoteAddress // Track IP for anonymous users
     });
-    
+
     await download.save();
-    
+
     // Increment download count on wallpaper
     wallpaper.downloadCount += 1;
     await wallpaper.save();
-    
-    res.json({ success: true });
+
+    res.json({ message: 'Download recorded successfully' });
   } catch (error) {
     console.error('Download tracking error:', error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500).json({ message: 'Error recording download' });
   }
 });
 

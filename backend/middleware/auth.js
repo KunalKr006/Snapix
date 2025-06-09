@@ -60,6 +60,7 @@ const auth = async (req, res, next) => {
     req.user = user;
     req.token = token;
     req.tokenExp = decoded.exp;
+    console.log('User authenticated:', user.username, 'Role:', user.role);
     
     next();
   } catch (error) {

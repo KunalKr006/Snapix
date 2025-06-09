@@ -65,6 +65,8 @@ const Navbar = () => {
             <div className="hidden sm:flex sm:space-x-8">
               {user && (
                 <>
+                  {/* Admin links moved to dropdown */}
+                  {/*
                   {user.role === 'admin' && (
                     <>
                       <motion.div variants={itemAnimation}>
@@ -93,6 +95,7 @@ const Navbar = () => {
                       </motion.div>
                     </>
                   )}
+                  */}
                 </>
               )}
             </div>
@@ -199,6 +202,40 @@ const Navbar = () => {
                           </button>
                         )}
                       </Menu.Item>
+                      {user.role === 'admin' && (
+                        <>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <NavLink
+                                to="/upload"
+                                onClick={() => setIsDropdownOpen(false)}
+                                className={({ isActive: navActive }) =>
+                                  navActive
+                                    ? "text-primary-600 dark:text-primary-400 border-b-2 border-primary-500 dark:border-primary-400 font-medium block px-3 py-2 text-sm transition-colors duration-200"
+                                    : "text-gray-500 hover:text-gray-700 dark:text-dark-text-secondary dark:hover:text-dark-text-primary border-b-2 border-transparent hover:border-gray-300 dark:hover:border-dark-border block px-3 py-2 text-sm transition-colors duration-200"
+                                }
+                              >
+                                Upload
+                              </NavLink>
+                            )}
+                          </Menu.Item>
+                          <Menu.Item>
+                            {({ active }) => (
+                              <NavLink
+                                to="/dashboard"
+                                onClick={() => setIsDropdownOpen(false)}
+                                className={({ isActive: navActive }) =>
+                                  navActive
+                                    ? "text-primary-600 dark:text-primary-400 border-b-2 border-primary-500 dark:border-primary-400 font-medium block px-3 py-2 text-sm transition-colors duration-200"
+                                    : "text-gray-500 hover:text-gray-700 dark:text-dark-text-secondary dark:hover:text-dark-text-primary border-b-2 border-transparent hover:border-gray-300 dark:hover:border-dark-border block px-3 py-2 text-sm transition-colors duration-200"
+                                }
+                              >
+                                Dashboard
+                              </NavLink>
+                            )}
+                          </Menu.Item>
+                        </>
+                      )}
                     </div>
                   </Menu.Items>
                 </Transition>

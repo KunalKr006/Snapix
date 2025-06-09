@@ -6,7 +6,7 @@ import api from './api';
  */
 export const getDashboardStats = async () => {
   try {
-    const response = await api.get('/api/admin/dashboard');
+    const response = await api.get('/api/admin/dashboard-stats');
     return response.data;
   } catch (error) {
     console.error('Error fetching dashboard statistics:', error);
@@ -20,10 +20,24 @@ export const getDashboardStats = async () => {
  */
 export const getWallpaperStats = async () => {
   try {
-    const response = await api.get('/admin/wallpaper-stats');
+    const response = await api.get('/api/admin/wallpaper-stats');
     return response.data;
   } catch (error) {
     console.error('Error fetching wallpaper statistics:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch list of all users
+ * @returns {Promise<Array>} Array of user objects
+ */
+export const getUsers = async () => {
+  try {
+    const response = await api.get('/api/admin/users');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
     throw error;
   }
 }; 

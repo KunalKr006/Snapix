@@ -16,6 +16,7 @@ import LandingPage from './pages/LandingPage';
 import About from './pages/About';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import EditWallpaper from './pages/EditWallpaper';
 
 // Protected Route component
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
@@ -30,13 +31,16 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
   }
 
   if (!user) {
+    console.log('ProtectedRoute: No user found, redirecting to /login');
     return <Navigate to="/login" />;
   }
   
   if (requireAdmin && user.role !== 'admin') {
+    console.log('ProtectedRoute: User role is not admin, redirecting to /:', user.role);
     return <Navigate to="/" />;
   }
   
+  console.log('ProtectedRoute: User is authorized.', user.role);
   return children;
 };
 
@@ -159,6 +163,16 @@ const AnimatedRoutes = () => {
             <ProtectedRoute requireAdmin>
               <PageTransition>
                 <Dashboard />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-wallpaper/:id"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <EditWallpaper />
               </PageTransition>
             </ProtectedRoute>
           }

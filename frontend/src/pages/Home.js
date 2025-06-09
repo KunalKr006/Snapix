@@ -154,9 +154,6 @@ const Home = () => {
     }
     
     try {
-      // Skip download for admin users
-      if (isAdmin) return;
-
       // Show downloading feedback
       const notification = document.createElement('div');
       notification.className = 'fixed bottom-4 right-4 bg-primary-600 text-white px-4 py-2 rounded-md shadow-lg z-50';
@@ -165,7 +162,7 @@ const Home = () => {
       
       // Track download in backend
       try {
-        await api.post(`/wallpapers/${wallpaperId}/download`);
+        await api.post(`/api/wallpapers/${wallpaperId}/download`);
       } catch (error) {
         console.error('Failed to track download:', error);
         // Continue with download even if tracking fails
