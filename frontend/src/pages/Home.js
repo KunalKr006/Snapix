@@ -6,7 +6,8 @@ import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScrollAnimation from '../components/ScrollAnimation';
 import api from '../services/api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import LoginPromptModal from '../components/LoginPromptModal';
 
 const CATEGORIES = ['All', 'Nature', 'Abstract', 'Animals', 'Architecture', 'Technology', 'Space', 'Landscape'];
 
@@ -54,7 +55,9 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const wallpapersPerPage = isMobile ? 8 : 16;
+  const navigate = useNavigate();
 
   const isAdmin = user?.role === 'admin';
 
@@ -144,6 +147,12 @@ const Home = () => {
   const handleDownload = async (url, title, wallpaperId, e) => {
     if (e) e.stopPropagation();
     
+    // Check if user is logged in
+    if (!user) {
+      setShowLoginPrompt(true);
+      return;
+    }
+    
     try {
       // Skip download for admin users
       if (isAdmin) return;
@@ -220,6 +229,15 @@ const Home = () => {
       console.error('Download error:', error);
       alert(`Failed to download. Please try again later.`);
     }
+  };
+
+  const handleConfirmLogin = () => {
+    setShowLoginPrompt(false);
+    navigate('/login');
+  };
+
+  const handleCancelLogin = () => {
+    setShowLoginPrompt(false);
   };
 
   const handleCategorySelect = (category) => {
@@ -377,29 +395,13 @@ const Home = () => {
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                       
-                      {/* Wishlist Button - positioned bottom-right and always visible on mobile */}
-                      {user && !isAdmin && (
-                        <div onClick={(e) => e.stopPropagation()} className="z-10 absolute bottom-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                          <WishlistButton wallpaperId={wallpaper._id} />
-                        </div>
-                      )}
+                      {/* Wishlist Button - show for all users */}
+                      <div onClick={(e) => e.stopPropagation()} className="z-10 absolute bottom-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                        <WishlistButton wallpaperId={wallpaper._id} />
+                      </div>
 
-                      {/* Overlay that appears on hover */}
-                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-end justify-end p-3">
-                        <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          
-                          {!isAdmin && (
-                            <motion.button
-                              onClick={(e) => handleDownload(wallpaper.imageUrl, wallpaper.title, wallpaper._id, e)}
-                              className="p-2 rounded-full bg-white dark:bg-dark-card text-primary-600 dark:text-primary-400 hover:bg-gray-100 dark:hover:bg-dark-border shadow-lg transition-colors duration-200"
-                              title={`Download ${wallpaper.title}`}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              <ArrowDownTrayIcon className="h-5 w-5" />
-                            </motion.button>
-                          )}
-                        </div>
+                      {/* Overlay that appears on hover - removed download button */}
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300">
                       </div>
                     </motion.div>
                   </ScrollAnimation>
@@ -494,6 +496,13 @@ const Home = () => {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <LoginPromptModal
+          message="Please login to download wallpapers. Would you like to login now?"
+          onConfirm={handleConfirmLogin}
+          onCancel={handleCancelLogin}
+          show={showLoginPrompt}
+        />
 
         {/* Footer */}
         <footer className="mt-20 pt-10 border-t border-gray-200 dark:border-dark-border">

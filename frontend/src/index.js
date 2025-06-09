@@ -32,7 +32,7 @@ axios.interceptors.response.use(
       console.log('Authentication error, clearing token');
       localStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
-      window.location.href = '/login';
+      // Don't redirect to login, just clear the token
     }
     
     return Promise.reject(error);

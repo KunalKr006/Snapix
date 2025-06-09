@@ -1,6 +1,8 @@
 import axios from 'axios';
 
+
 const API_URL = 'https://snapix.onrender.com';
+//const API_URL = 'http://localhost:5050';
 
 // Create a configured axios instance
 const api = axios.create({

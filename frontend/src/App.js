@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { UIProvider, useUI } from './context/UIContext';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import PageTransition from './components/PageTransition';
@@ -61,11 +62,19 @@ const PublicRoute = ({ children }) => {
 // Main App Layout with conditional navbar
 const AppLayout = () => {
   const { user } = useAuth();
+  const { isDropdownOpen, setIsDropdownOpen } = useUI();
   
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark-bg transition-colors duration-200">
-      {user && <Navbar />}
-      <main>
+      {/* Blur overlay */}
+      <div 
+        className={`fixed inset-0 backdrop-blur-sm bg-black/30 transition-opacity duration-200 z-10 ${
+          isDropdownOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setIsDropdownOpen(false)}
+      />
+      <Navbar />
+      <main className="relative pt-16">
         <AnimatedRoutes />
       </main>
     </div>
@@ -80,33 +89,28 @@ const AnimatedRoutes = () => {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        {/* Root route - shows landing page for non-logged in users, redirects to home for logged in users */}
+        {/* Root route - shows landing page with animation, then redirects to home */}
         <Route path="/" element={
-          user ? (
-            <Navigate to="/home" replace />
-          ) : (
-            <PageTransition>
-              <LandingPage />
-            </PageTransition>
-          )
+          <PageTransition>
+            <LandingPage />
+          </PageTransition>
         } />
         
-        {/* Home route - protected, requires login */}
+        {/* Home route - public, no login required */}
         <Route path="/home" element={
-          <ProtectedRoute>
-            <PageTransition>
-              <Home />
-            </PageTransition>
-          </ProtectedRoute>
+          <PageTransition>
+            <Home />
+          </PageTransition>
         } />
         
-        {/* About route - public, but shows navbar only for logged-in users */}
+        {/* About route - public */}
         <Route path="/about" element={
           <PageTransition>
             <About />
           </PageTransition>
         } />
         
+        {/* Auth routes - only accessible when not logged in */}
         <Route
           path="/login"
           element={
@@ -125,6 +129,38 @@ const AnimatedRoutes = () => {
                 <Register />
               </PageTransition>
             </PublicRoute>
+          }
+        />
+
+        {/* Protected routes - require login */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Profile />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/upload"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <Upload />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <Dashboard />
+              </PageTransition>
+            </ProtectedRoute>
           }
         />
 
@@ -150,38 +186,6 @@ const AnimatedRoutes = () => {
           }
         />
 
-        {/* Protected routes */}
-        <Route
-          path="/upload"
-          element={
-            <ProtectedRoute requireAdmin>
-              <PageTransition>
-                <Upload />
-              </PageTransition>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute requireAdmin>
-              <PageTransition>
-                <Dashboard />
-              </PageTransition>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <PageTransition>
-                <Profile />
-              </PageTransition>
-            </ProtectedRoute>
-          }
-        />
-
         {/* Catch all route - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
@@ -194,7 +198,9 @@ function App() {
     <Router>
       <ThemeProvider>
         <AuthProvider>
-          <AppLayout />
+          <UIProvider>
+            <AppLayout />
+          </UIProvider>
         </AuthProvider>
       </ThemeProvider>
     </Router>

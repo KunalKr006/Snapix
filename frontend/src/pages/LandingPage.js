@@ -6,10 +6,10 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Automatically redirect to login page after 1 second
+    // Automatically redirect to home page after animation
     const timer = setTimeout(() => {
-      navigate('/login');
-    }, 1000);
+      navigate('/home');
+    }, 2000); // Increased to 2 seconds to allow animation to complete
     
     return () => clearTimeout(timer);
   }, [navigate]);
