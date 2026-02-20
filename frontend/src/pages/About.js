@@ -3,10 +3,10 @@ import { motion } from 'framer-motion';
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="app-shell py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <motion.div 
-          className="bg-white dark:bg-dark-card rounded-lg shadow-lg overflow-hidden"
+          className="surface-card overflow-hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -17,7 +17,7 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-dark-text-primary mb-2">
+              <h1 className="section-title text-center mb-2">
                 About Snapix
               </h1>
               <div className="w-16 h-1 bg-primary-600 dark:bg-primary-400 mx-auto mb-10"></div>
@@ -44,13 +44,13 @@ const About = () => {
                 Whether you’re into breathtaking landscapes, urban vibes, serene nature, or abstract art, you’ll find something here to match your mood and style. I believe a wallpaper isn’t just a background — it’s a reflection of who you are, what inspires you, and what you love.
               </p>
 
-              <p className="mt-8 text-gray-600 dark:text-dark-text-secondary">
+              <p className="mt-8 text-slate-300">
                 Follow my photography journey on Instagram:{" "}
                 <a
                   href="https://instagram.com/frame_o_k2"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-600 dark:text-primary-400 underline"
+                  className="text-primary-300 underline"
                 >
                   @frame_o_k2
                 </a>
@@ -69,3 +69,6 @@ const About = () => {
 };
 
 export default About;
+
+
+

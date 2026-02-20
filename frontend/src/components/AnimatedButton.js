@@ -28,9 +28,9 @@ const AnimatedButton = ({
       case 'primary':
         return 'bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600 text-white shadow-md';
       case 'secondary':
-        return 'bg-gray-100 hover:bg-gray-200 dark:bg-dark-border dark:hover:bg-dark-border/80 text-gray-800 dark:text-dark-text-primary';
+        return 'bg-white/10 hover:bg-white/20 text-slate-100 border border-white/20';
       case 'outline':
-        return 'bg-transparent border border-primary-600 dark:border-primary-500 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/10';
+        return 'bg-transparent border border-primary-500 text-primary-300 hover:bg-primary-500/20';
       case 'danger':
         return 'bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-600 text-white';
       default:

@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
   const fetchUserData = async () => {
     try {
       const res = await api.get('/api/auth/me');
-      console.log('Fetched user data:', res.data);
       setUser(res.data);
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -51,9 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password) => {
     try {
-      console.log('Attempting registration with:', { username, email });
       const res = await api.post('api/auth/register', { username, email, password });
-      console.log('Registration response:', res.data);
       
       const { token, user } = res.data;
       localStorage.setItem('token', token);

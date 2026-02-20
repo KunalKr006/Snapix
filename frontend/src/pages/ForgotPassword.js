@@ -50,23 +50,23 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="auth-shell app-shell">
       <motion.div 
-        className="max-w-md w-full space-y-8 bg-white dark:bg-dark-card p-8 rounded-lg shadow-lg"
+        className="auth-card"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div>
           <motion.h2 
-            className="mt-2 text-center text-3xl font-extrabold text-gray-900 dark:text-dark-text-primary"
+            className="mt-2 text-center text-3xl font-extrabold text-slate-100"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             Forgot Your Password?
           </motion.h2>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-dark-text-secondary">
+          <p className="mt-2 text-center text-sm text-slate-300">
             Enter your email address and we'll send you a verification code to reset your password.
           </p>
         </div>
@@ -80,7 +80,7 @@ const ForgotPassword = () => {
         >
           {error && (
             <motion.div 
-              className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded relative" 
+              className="bg-red-900/25 border border-red-700/70 text-red-300 px-4 py-3 rounded relative" 
               role="alert"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -92,7 +92,7 @@ const ForgotPassword = () => {
           
           {message && (
             <motion.div 
-              className={`${isSuccess ? 'bg-green-100 dark:bg-green-900/30 border-green-400 dark:border-green-700 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 border-red-400 dark:border-red-700 text-red-700 dark:text-red-400'} px-4 py-3 rounded relative border`}
+              className={`${isSuccess ? 'bg-green-900/25 border-green-700/70 text-green-300' : 'bg-red-900/25 border-red-700/70 text-red-300'} px-4 py-3 rounded relative border`}
               role="alert"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -106,7 +106,7 @@ const ForgotPassword = () => {
           )}
           
           <div>
-            <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+            <label htmlFor="email-address" className="block text-sm font-medium text-slate-200 mb-1">
               Email address
             </label>
             <motion.input
@@ -115,26 +115,26 @@ const ForgotPassword = () => {
               type="email"
               autoComplete="email"
               required
-              className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-all duration-200"
+              className="field-input"
               placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               whileFocus={{ scale: 1.01 }}
               disabled={loading || isSuccess}
             />
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+            <p className="mt-1 text-xs text-slate-400">
               Use Gmail, Outlook, Hotmail, Yahoo, or iCloud email
             </p>
           </div>
 
           <div className="text-center">
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-              <span role="img" aria-label="info">ℹ️</span> A 6-digit verification code will be sent to your email
+            <div className="text-xs text-slate-400 mb-4">
+              [info] A 6-digit verification code will be sent to your email
             </div>
             <motion.button
               type="submit"
               disabled={loading || isSuccess}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-primary-700 dark:hover:bg-primary-600 transition-colors duration-200 disabled:opacity-70"
+              className="group relative flex w-full justify-center rounded-xl border border-transparent bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-primary-900/20 transition-colors duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-70 dark:bg-primary-700 dark:hover:bg-primary-600"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -165,7 +165,7 @@ const ForgotPassword = () => {
               className="text-sm"
             >
               <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500 dark:text-primary-400 dark:hover:text-primary-300 transition-colors duration-200">
-                ← Back to login
+                Back to login
               </Link>
             </motion.div>
             <motion.div
@@ -184,3 +184,8 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword; 
+
+
+
+
+

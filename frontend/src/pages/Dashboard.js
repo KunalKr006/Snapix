@@ -94,55 +94,55 @@ const Dashboard = () => {
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-dark-card rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
-          <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-dark-border">
-            <h3 className="text-lg font-medium text-gray-900 dark:text-dark-text-primary">Registered Users</h3>
+        <div className="rounded-lg border border-white/20 bg-black/70 backdrop-blur-md shadow-xl shadow-black/40 w-full max-w-4xl max-h-[90vh] overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-white/10">
+            <h3 className="text-lg font-medium text-slate-100">Registered Users</h3>
             <button
               onClick={() => setShowUsersModal(false)}
-              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 transition-colors"
+              className="text-slate-400 hover:text-slate-200 transition-colors"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
           <div className="p-4 overflow-y-auto max-h-[calc(90vh-8rem)]">
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-dark-border">
-                <thead className="bg-gray-50 dark:bg-dark-border">
+              <table className="min-w-full divide-y divide-white/10">
+                <thead className="bg-white/5">
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Username</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Email</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Role</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Joined</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Username</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Email</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Role</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Joined</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-dark-card divide-y divide-gray-200 dark:divide-dark-border">
+                <tbody className="bg-transparent divide-y divide-white/10">
                   {users.map((user) => (
                     <tr key={user._id}>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-primary-100 dark:bg-primary-900/20 flex items-center justify-center">
-                            <span className="text-lg font-medium text-primary-600 dark:text-primary-400">
+                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-primary-900/30 flex items-center justify-center">
+                            <span className="text-lg font-medium text-primary-300">
                               {user.username.charAt(0).toUpperCase()}
                             </span>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900 dark:text-dark-text-primary">{user.username}</div>
+                            <div className="text-sm font-medium text-slate-100">{user.username}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 dark:text-dark-text-primary">{user.email}</div>
+                        <div className="text-sm text-slate-100">{user.email}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                           user.role === 'admin' 
-                            ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400' 
-                            : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
+                            ? 'bg-purple-900/30 text-purple-300' 
+                            : 'bg-green-900/30 text-green-300'
                         }`}>
                           {user.role}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-dark-text-secondary">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-400">
                         {new Date(user.createdAt).toLocaleDateString()}
                       </td>
                     </tr>
@@ -158,11 +158,11 @@ const Dashboard = () => {
 
   if (!user || user.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+      <div className="app-shell py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-red-600 dark:text-red-500">Access Denied</h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-dark-text-secondary">
+            <p className="mt-4 text-lg text-slate-300">
               You do not have permission to view this page.
             </p>
           </div>
@@ -172,12 +172,12 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg py-6 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="app-shell py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-dark-text-primary mb-6">Admin Dashboard</h1>
+        <h1 className="section-title mb-6">Admin Dashboard</h1>
         
         {error && (
-          <div className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded relative mb-6">
+          <div className="bg-red-900/25 border border-red-700/70 text-red-300 px-4 py-3 rounded relative mb-6">
             <span className="block sm:inline">{error}</span>
           </div>
         )}
@@ -190,55 +190,55 @@ const Dashboard = () => {
           <>
             {/* Stats overview */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-              <div className="bg-white dark:bg-dark-card overflow-hidden shadow rounded-lg">
+              <div className="surface-card overflow-hidden">
                 <div className="px-4 py-5 sm:p-6">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 dark:text-dark-text-secondary truncate">Total Wallpapers</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-dark-text-primary">{wallpapers.length}</dd>
+                    <dt className="text-sm font-medium text-slate-400 truncate">Total Wallpapers</dt>
+                    <dd className="mt-1 text-3xl font-semibold text-slate-100">{wallpapers.length}</dd>
                   </dl>
                 </div>
               </div>
               
-              <div className="bg-white dark:bg-dark-card overflow-hidden shadow rounded-lg">
+              <div className="surface-card overflow-hidden">
                 <div className="px-4 py-5 sm:p-6">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 dark:text-dark-text-secondary truncate">Total Downloads</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-dark-text-primary">{totalDownloads}</dd>
+                    <dt className="text-sm font-medium text-slate-400 truncate">Total Downloads</dt>
+                    <dd className="mt-1 text-3xl font-semibold text-slate-100">{totalDownloads}</dd>
                   </dl>
                 </div>
               </div>
               
               <div 
-                className="bg-white dark:bg-dark-card overflow-hidden shadow rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-dark-border transition-colors"
+                className="surface-card cursor-pointer overflow-hidden transition-colors hover:bg-white/10"
                 onClick={() => setShowUsersModal(true)}
               >
                 <div className="px-4 py-5 sm:p-6">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 dark:text-dark-text-secondary truncate">Total Users</dt>
-                    <dd className="mt-1 text-3xl font-semibold text-gray-900 dark:text-dark-text-primary">{totalUsers}</dd>
+                    <dt className="text-sm font-medium text-slate-400 truncate">Total Users</dt>
+                    <dd className="mt-1 text-3xl font-semibold text-slate-100">{totalUsers}</dd>
                   </dl>
                 </div>
               </div>
             </div>
             
             {/* Wallpapers table */}
-            <div className="bg-white dark:bg-dark-card shadow overflow-hidden sm:rounded-md">
+            <div className="surface-card overflow-hidden">
               <div className="px-4 py-5 sm:px-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-dark-text-primary">Wallpaper Statistics</h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-dark-text-secondary">Detailed download stats for each wallpaper.</p>
+                <h3 className="text-lg leading-6 font-medium text-slate-100">Wallpaper Statistics</h3>
+                <p className="mt-1 max-w-2xl text-sm text-slate-400">Detailed download stats for each wallpaper.</p>
               </div>
-              <div className="border-t border-gray-200 dark:border-dark-border">
+              <div className="border-t border-white/10">
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200 dark:divide-dark-border">
-                    <thead className="bg-gray-50 dark:bg-dark-border">
+                  <table className="min-w-full divide-y divide-white/10">
+                    <thead className="bg-white/5">
                       <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Wallpaper</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Category</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Downloads</th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-dark-text-secondary uppercase tracking-wider">Actions</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Wallpaper</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Category</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Downloads</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white dark:bg-dark-card divide-y divide-gray-200 dark:divide-dark-border">
+                    <tbody className="bg-transparent divide-y divide-white/10">
                       {wallpapers.map((wallpaper) => (
                         <tr key={wallpaper._id}>
                           <td className="px-6 py-4 whitespace-nowrap">
@@ -247,15 +247,15 @@ const Dashboard = () => {
                                 <img className="h-10 w-10 rounded-md object-cover" src={wallpaper.imageUrl} alt={wallpaper.title} />
                               </div>
                               <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900 dark:text-dark-text-primary">{wallpaper.title}</div>
+                                <div className="text-sm font-medium text-slate-100">{wallpaper.title}</div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 dark:text-dark-text-primary">{wallpaper.category}</div>
+                            <div className="text-sm text-slate-100">{wallpaper.category}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900 dark:text-dark-text-primary">{wallpaper.downloadCount}</div>
+                            <div className="text-sm text-slate-100">{wallpaper.downloadCount}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex space-x-2">
@@ -294,3 +294,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard; 
+
+
+

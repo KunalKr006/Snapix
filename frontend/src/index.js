@@ -29,7 +29,6 @@ axios.interceptors.response.use(
     
     // Handle token expiration
     if (error.response && error.response.status === 401) {
-      console.log('Authentication error, clearing token');
       localStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
       // Don't redirect to login, just clear the token

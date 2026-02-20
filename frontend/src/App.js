@@ -31,16 +31,13 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
   }
 
   if (!user) {
-    console.log('ProtectedRoute: No user found, redirecting to /login');
     return <Navigate to="/login" />;
   }
   
   if (requireAdmin && user.role !== 'admin') {
-    console.log('ProtectedRoute: User role is not admin, redirecting to /:', user.role);
     return <Navigate to="/" />;
   }
   
-  console.log('ProtectedRoute: User is authorized.', user.role);
   return children;
 };
 
@@ -78,7 +75,7 @@ const AppLayout = () => {
         onClick={() => setIsDropdownOpen(false)}
       />
       <Navbar />
-      <main className="relative pt-16">
+      <main className="relative pb-40 pt-16 sm:pb-0">
         <AnimatedRoutes />
       </main>
     </div>

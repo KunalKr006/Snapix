@@ -94,23 +94,23 @@ const ChangePassword = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="auth-shell app-shell">
       <motion.div 
-        className="max-w-md w-full space-y-8 bg-white dark:bg-dark-card p-8 rounded-lg shadow-lg"
+        className="auth-card"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div>
           <motion.h2 
-            className="mt-2 text-center text-3xl font-extrabold text-gray-900 dark:text-dark-text-primary"
+            className="mt-2 text-center text-3xl font-extrabold text-slate-100"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             Change Your Password
           </motion.h2>
-          <p className="mt-2 text-center text-sm text-gray-600 dark:text-dark-text-secondary">
+          <p className="mt-2 text-center text-sm text-slate-300">
             Update your password to keep your account secure
           </p>
         </div>
@@ -124,7 +124,7 @@ const ChangePassword = () => {
         >
           {error && (
             <motion.div 
-              className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded relative" 
+              className="bg-red-900/25 border border-red-700/70 text-red-300 px-4 py-3 rounded relative" 
               role="alert"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -136,7 +136,7 @@ const ChangePassword = () => {
           
           {message && (
             <motion.div 
-              className={`${isSuccess ? 'bg-green-100 dark:bg-green-900/30 border-green-400 dark:border-green-700 text-green-700 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/30 border-red-400 dark:border-red-700 text-red-700 dark:text-red-400'} px-4 py-3 rounded relative border`}
+              className={`${isSuccess ? 'bg-green-900/25 border-green-700/70 text-green-300' : 'bg-red-900/25 border-red-700/70 text-red-300'} px-4 py-3 rounded relative border`}
               role="alert"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -151,7 +151,7 @@ const ChangePassword = () => {
           
           <div className="space-y-4">
             <div>
-              <label htmlFor="current-password" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="current-password" className="block text-sm font-medium text-slate-200 mb-1">
                 Current Password
               </label>
               <motion.input
@@ -159,7 +159,7 @@ const ChangePassword = () => {
                 name="currentPassword"
                 type="password"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-all duration-200"
+                className="field-input"
                 placeholder="Current password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
@@ -169,7 +169,7 @@ const ChangePassword = () => {
             </div>
             
             <div>
-              <label htmlFor="new-password" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="new-password" className="block text-sm font-medium text-slate-200 mb-1">
                 New Password
               </label>
               <motion.input
@@ -177,7 +177,7 @@ const ChangePassword = () => {
                 name="newPassword"
                 type="password"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-all duration-200"
+                className="field-input"
                 placeholder="New password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
@@ -186,7 +186,7 @@ const ChangePassword = () => {
                 minLength={6}
               />
               <div className="flex justify-between mt-1">
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-slate-400">
                   Min. 6 characters with uppercase, lowercase, number & special character
                 </p>
                 {newPassword && (
@@ -198,7 +198,7 @@ const ChangePassword = () => {
             </div>
             
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-200 mb-1">
                 Confirm New Password
               </label>
               <motion.input
@@ -206,7 +206,7 @@ const ChangePassword = () => {
                 name="confirmPassword"
                 type="password"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm transition-all duration-200"
+                className="field-input"
                 placeholder="Confirm new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -226,7 +226,7 @@ const ChangePassword = () => {
             <motion.button
               type="submit"
               disabled={loading || isSuccess}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-primary-700 dark:hover:bg-primary-600 transition-colors duration-200 disabled:opacity-70"
+              className="group relative flex w-full justify-center rounded-xl border border-transparent bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-primary-900/20 transition-colors duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-70 dark:bg-primary-700 dark:hover:bg-primary-600"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -258,7 +258,7 @@ const ChangePassword = () => {
               onClick={() => navigate('/profile')}
               whileHover={{ scale: 1.05 }}
             >
-              ← Back to Profile
+              Back to Profile
             </motion.button>
           </div>
         </motion.form>
@@ -268,3 +268,7 @@ const ChangePassword = () => {
 };
 
 export default ChangePassword; 
+
+
+
+

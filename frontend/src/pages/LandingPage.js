@@ -15,7 +15,7 @@ const LandingPage = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-dark-bg dark:to-dark-card p-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-black p-4">
       <motion.div 
         className="text-center max-w-xl"
         initial={{ opacity: 0, y: 20 }}
@@ -40,7 +40,7 @@ const LandingPage = () => {
         
         {/* Tagline */}
         <motion.p 
-          className="text-xl md:text-2xl text-gray-600 dark:text-dark-text-secondary font-light"
+          className="text-xl md:text-2xl text-slate-300 font-light"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -53,3 +53,5 @@ const LandingPage = () => {
 };
 
 export default LandingPage; 
+
+

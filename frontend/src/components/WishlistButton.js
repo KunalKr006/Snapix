@@ -86,8 +86,8 @@ const WishlistButton = ({ wallpaperId }) => {
         disabled={loading}
         className={`p-2 rounded-full shadow-lg transition-colors duration-200 ${
           isInWishlist
-            ? 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800/40'
-            : 'bg-white dark:bg-dark-card text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20'
+            ? 'bg-red-900/35 text-red-300 hover:bg-red-900/50'
+            : 'bg-white/10 text-slate-300 hover:text-red-400 hover:bg-red-900/20 border border-white/10'
         }`}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}

@@ -8,6 +8,7 @@ import ScrollAnimation from '../components/ScrollAnimation';
 import api from '../services/api';
 import { Link, useNavigate } from 'react-router-dom';
 import LoginPromptModal from '../components/LoginPromptModal';
+import { useUI } from '../context/UIContext';
 
 const CATEGORIES = ['All', 'Nature', 'Abstract', 'Animals', 'Architecture', 'Technology', 'Space', 'Landscape'];
 
@@ -45,10 +46,15 @@ const fadeIn = {
 
 const Home = () => {
   const { user } = useAuth();
+  const {
+    homeSearchTerm,
+    setHomeSearchTerm,
+    homeSelectedCategory,
+    setHomeSelectedCategory,
+    homeSearchTrigger,
+  } = useUI();
   const [wallpapers, setWallpapers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [error, setError] = useState('');
   const [selectedWallpaper, setSelectedWallpaper] = useState(null);
   const [page, setPage] = useState(1);
@@ -73,7 +79,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchWallpapers(true);
-  }, [selectedCategory, isMobile]);
+  }, [homeSelectedCategory, isMobile, homeSearchTrigger]);
 
   const fetchWallpapers = async (reset = false, newPageValue = null) => {
     try {
@@ -89,10 +95,10 @@ const Home = () => {
       
       // Use the new page value if provided (from handleLoadMore), otherwise use the state value
       const currentPage = reset ? 1 : (newPageValue || page);
-      const category = selectedCategory === 'All' ? '' : selectedCategory;
+      const category = homeSelectedCategory === 'All' ? '' : homeSelectedCategory;
       
       // Fetch all wallpapers matching the search criteria
-      const allWallpapers = await getWallpapers(category, searchTerm);
+      const allWallpapers = await getWallpapers(category, homeSearchTerm);
       
       // Use an array of unique IDs to prevent duplication
       const uniqueWallpaperMap = new Map();
@@ -238,7 +244,7 @@ const Home = () => {
   };
 
   const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
+    setHomeSelectedCategory(category);
   };
 
   const handleWallpaperClick = (wallpaper) => {
@@ -279,9 +285,9 @@ const Home = () => {
         </ScrollAnimation>
 
         {/* Search and Filter */}
-        <ScrollAnimation type="fade-up" delay={200}>
+        <div className="mb-8 sm:mb-10">
           <motion.div 
-            className="bg-white dark:bg-dark-card shadow-lg rounded-lg p-4 mb-8 sm:p-6 sm:mb-10"
+            className="rounded-lg bg-white p-4 shadow-lg transition-all duration-300 dark:bg-dark-card sm:p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
@@ -291,8 +297,8 @@ const Home = () => {
                 <form onSubmit={handleSearch} className="flex items-center">
                   <input
                     type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={homeSearchTerm}
+                    onChange={(e) => setHomeSearchTerm(e.target.value)}
                     placeholder="Search wallpapers..."
                     className="block w-full rounded-l-md border-gray-300 dark:border-dark-border dark:bg-dark-card dark:text-dark-text-primary shadow-sm focus:border-primary-500 focus:ring-primary-500 transition-all duration-200 bg-transparent px-3 py-2 text-sm sm:text-base"
                   />
@@ -300,7 +306,7 @@ const Home = () => {
                     type="submit"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-r-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200 ml-2"
+                    className="ml-2 inline-flex items-center rounded-r-md border border-transparent bg-primary-600 px-3 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-primary-700 dark:hover:bg-primary-800"
                   >
                     Search
                   </motion.button>
@@ -316,7 +322,7 @@ const Home = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors duration-200 whitespace-nowrap ${
-                        selectedCategory === category 
+                        homeSelectedCategory === category 
                           ? 'bg-primary-600 text-white dark:bg-primary-700' 
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-dark-border dark:text-dark-text-secondary dark:hover:bg-dark-border/80'
                       }`}
@@ -328,7 +334,7 @@ const Home = () => {
               </div>
             </div>
           </motion.div>
-        </ScrollAnimation>
+        </div>
 
         {/* Error Message */}
         {error && (
@@ -368,7 +374,7 @@ const Home = () => {
           ) : (
             <>
               <motion.div 
-                className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -502,7 +508,7 @@ const Home = () => {
         />
 
         {/* Footer */}
-        <footer className="mt-20 pt-10 border-t border-gray-200 dark:border-dark-border">
+        <footer className="hidden sm:block mt-20 pt-10 border-t border-gray-200 dark:border-dark-border">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <h3 className="text-lg font-bold text-gray-900 dark:text-dark-text-primary mb-4">Snapix</h3>

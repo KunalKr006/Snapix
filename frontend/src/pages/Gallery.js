@@ -41,11 +41,11 @@ const Gallery = () => {
   }, [category, search]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="app-shell py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Wallpaper Gallery</h1>
-          <p className="mt-2 text-sm text-gray-600">
+          <h1 className="section-title">Wallpaper Gallery</h1>
+          <p className="mt-2 text-sm text-slate-300">
             Browse and download beautiful wallpapers for your devices
           </p>
         </div>
@@ -57,14 +57,14 @@ const Gallery = () => {
               placeholder="Search wallpapers..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+              className="field-input"
             />
           </div>
           <div className="w-full sm:w-48">
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"
+              className="field-input"
             >
               <option value="">All Categories</option>
               {categories.map((cat) => (
@@ -77,7 +77,7 @@ const Gallery = () => {
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-8" role="alert">
+          <div className="bg-red-900/25 border border-red-700/70 text-red-300 px-4 py-3 rounded relative mb-8" role="alert">
             <span className="block sm:inline">{error}</span>
           </div>
         )}
@@ -88,18 +88,15 @@ const Gallery = () => {
           </div>
         ) : wallpapers.length === 0 ? (
           <div className="text-center py-12">
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No wallpapers found</h3>
-            <p className="mt-1 text-sm text-gray-500">
+            <h3 className="mt-2 text-sm font-medium text-slate-100">No wallpapers found</h3>
+            <p className="mt-1 text-sm text-slate-400">
               Try adjusting your search or filter to find what you're looking for.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {wallpapers.map((wallpaper) => (
-              <div
-                key={wallpaper._id}
-                className="bg-white overflow-hidden shadow rounded-lg relative group"
-              >
+              <div key={wallpaper._id} className="surface-card relative overflow-hidden rounded-2xl group">
                 <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                   <WishlistButton wallpaperId={wallpaper._id} />
                 </div>
@@ -110,10 +107,10 @@ const Gallery = () => {
                     className="w-full h-64 object-cover"
                   />
                   <div className="px-4 py-5 sm:p-6">
-                    <h3 className="text-lg font-medium text-gray-900">{wallpaper.title}</h3>
-                    <p className="mt-1 text-sm text-gray-500">{wallpaper.category}</p>
+                    <h3 className="text-lg font-medium text-slate-100">{wallpaper.title}</h3>
+                    <p className="mt-1 text-sm text-slate-400">{wallpaper.category}</p>
                     {wallpaper.description && (
-                      <p className="mt-2 text-sm text-gray-600 line-clamp-2">
+                      <p className="mt-2 text-sm text-slate-300 line-clamp-2">
                         {wallpaper.description}
                       </p>
                     )}
@@ -129,3 +126,6 @@ const Gallery = () => {
 };
 
 export default Gallery; 
+
+
+

@@ -85,7 +85,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-dark-bg py-8 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="auth-shell app-shell">
       <motion.div
         className="flex flex-col items-center mb-6 sm:mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -102,14 +102,14 @@ const Register = () => {
         />
       </motion.div>
       <motion.div 
-        className="max-w-md w-full space-y-6 bg-white dark:bg-dark-card p-6 rounded-lg shadow-lg sm:p-8"
+        className="auth-card"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div>
           <motion.h2 
-            className="mt-2 text-center text-2xl font-extrabold text-gray-900 dark:text-dark-text-primary sm:text-3xl"
+            className="mt-2 text-center text-2xl font-extrabold text-slate-100 sm:text-3xl"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -126,7 +126,7 @@ const Register = () => {
         >
           {error && (
             <motion.div 
-              className="bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-400 px-4 py-3 rounded relative text-sm" 
+              className="bg-red-900/25 border border-red-700/70 text-red-300 px-4 py-3 rounded relative text-sm" 
               role="alert"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -137,7 +137,7 @@ const Register = () => {
           )}
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="username" className="block text-sm font-medium text-slate-200 mb-1">
                 Username
               </label>
               <motion.input
@@ -145,19 +145,19 @@ const Register = () => {
                 name="username"
                 type="text"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card rounded-t-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 text-sm sm:text-base transition-all duration-200"
+                className="field-input rounded-t-xl rounded-b-none"
                 placeholder="Username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 minLength={3}
                 whileFocus={{ scale: 1.01 }}
               />
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs text-slate-400">
                 Must be at least 3 characters long
               </p>
             </div>
             <div>
-              <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="email-address" className="block text-sm font-medium text-slate-200 mb-1">
                 Email address
               </label>
               <motion.input
@@ -166,18 +166,18 @@ const Register = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 text-sm sm:text-base transition-all duration-200"
+                className="field-input rounded-none"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 whileFocus={{ scale: 1.01 }}
               />
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs text-slate-400">
                 Use Gmail, Outlook, Hotmail, Yahoo, or iCloud email
               </p>
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-200 mb-1">
                 Password
               </label>
               <motion.input
@@ -186,7 +186,7 @@ const Register = () => {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 text-sm sm:text-base transition-all duration-200"
+                className="field-input rounded-none"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -195,7 +195,7 @@ const Register = () => {
               />
               {password && (
                 <div className="flex justify-between mt-1">
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-slate-400">
                     Min. 6 characters with uppercase, lowercase, number & special character
                   </p>
                   <p className={`text-xs font-medium ${passwordStrength.color}`}>
@@ -205,7 +205,7 @@ const Register = () => {
               )}
             </div>
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 dark:text-dark-text-primary mb-1">
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-200 mb-1">
                 Confirm Password
               </label>
               <motion.input
@@ -214,7 +214,7 @@ const Register = () => {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-dark-text-primary dark:bg-dark-card rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 text-sm sm:text-base transition-all duration-200"
+                className="field-input rounded-b-xl rounded-t-none"
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -233,7 +233,7 @@ const Register = () => {
             <motion.button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:bg-primary-700 dark:hover:bg-primary-600 transition-colors duration-200 disabled:opacity-70"
+              className="group relative flex w-full justify-center rounded-xl border border-transparent bg-primary-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg shadow-primary-900/20 transition-colors duration-200 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-70 dark:bg-primary-700 dark:hover:bg-primary-600"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -272,3 +272,6 @@ const Register = () => {
 };
 
 export default Register; 
+
+
+

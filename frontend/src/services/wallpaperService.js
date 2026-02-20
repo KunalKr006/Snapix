@@ -60,9 +60,7 @@ export const deleteWallpaper = async (id) => {
 
 export const addToWishlist = async (wallpaperId) => {
   try {
-    console.log('Adding to wishlist:', wallpaperId);
     const response = await api.post(`/api/wallpapers/${wallpaperId}/wishlist`);
-    console.log('Add to wishlist response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error adding to wishlist:', error.response || error);
@@ -75,9 +73,7 @@ export const addToWishlist = async (wallpaperId) => {
 
 export const removeFromWishlist = async (wallpaperId) => {
   try {
-    console.log('Removing from wishlist:', wallpaperId);
     const response = await api.delete(`/api/wallpapers/${wallpaperId}/wishlist`);
-    console.log('Remove from wishlist response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error removing from wishlist:', error.response || error);

@@ -10,7 +10,7 @@ const WallpaperGrid = ({ wallpapers, onDelete }) => {
       {wallpapers.map((wallpaper) => (
         <div
           key={wallpaper._id}
-          className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+          className="rounded-lg border border-white/10 bg-white/10 shadow-md shadow-black/30 overflow-hidden hover:shadow-lg hover:shadow-black/40 backdrop-blur transition-shadow duration-300"
         >
           <Link to={`/wallpaper/${wallpaper._id}`}>
             <img
@@ -20,7 +20,7 @@ const WallpaperGrid = ({ wallpapers, onDelete }) => {
             />
           </Link>
           <div className="p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-slate-100 mb-2">
               {wallpaper.title}
             </h3>
             <div className="flex items-center justify-between">
@@ -40,7 +40,7 @@ const WallpaperGrid = ({ wallpapers, onDelete }) => {
               {wallpaper.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white/10 text-slate-200"
                 >
                   {tag}
                 </span>

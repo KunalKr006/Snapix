@@ -1,8 +1,15 @@
 import axios from 'axios';
 
+// API URLs for different environments
+const API_URLS = {
+  production: 'https://snapix.onrender.com',
+  development: 'http://localhost:5000'
+};
 
-const API_URL = 'https://snapix.onrender.com';
-//const API_URL = 'http://localhost:5050';
+// Select API URL based on environment
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? API_URLS.production 
+  : API_URLS.development;
 
 // Create a configured axios instance
 const api = axios.create({
@@ -35,7 +42,6 @@ api.interceptors.response.use(
     
     // Handle token expiration
     if (error.response && error.response.status === 401) {
-      console.log('Authentication error, clearing token');
       localStorage.removeItem('token');
       window.location.href = '/login';
     }

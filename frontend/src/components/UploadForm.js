@@ -57,31 +57,31 @@ const UploadForm = ({ onUpload }) => {
     <div className="max-w-2xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-6">Upload Wallpaper</h2>
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <div className="bg-red-900/25 border border-red-700/70 text-red-300 px-4 py-3 rounded relative mb-4">
           {error}
         </div>
       )}
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Title</label>
+          <label className="block text-sm font-medium text-slate-300">Title</label>
           <input
             type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            className="mt-1 block w-full rounded-md border-white/20 shadow-sm focus:border-primary-500 focus:ring-primary-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Category</label>
+          <label className="block text-sm font-medium text-slate-300">Category</label>
           <select
             name="category"
             value={formData.category}
             onChange={handleChange}
             required
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            className="mt-1 block w-full rounded-md border-white/20 shadow-sm focus:border-primary-500 focus:ring-primary-500"
           >
             <option value="">Select a category</option>
             <option value="Nature">Nature</option>
@@ -97,19 +97,19 @@ const UploadForm = ({ onUpload }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Tags (comma-separated)</label>
+          <label className="block text-sm font-medium text-slate-300">Tags (comma-separated)</label>
           <input
             type="text"
             name="tags"
             value={formData.tags}
             onChange={handleChange}
             placeholder="e.g., nature, landscape, mountains"
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            className="mt-1 block w-full rounded-md border-white/20 shadow-sm focus:border-primary-500 focus:ring-primary-500"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Mobile Resolution</label>
+          <label className="block text-sm font-medium text-slate-300">Mobile Resolution</label>
           <input
             type="file"
             name="mobile"
@@ -121,7 +121,7 @@ const UploadForm = ({ onUpload }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Desktop Resolution</label>
+          <label className="block text-sm font-medium text-slate-300">Desktop Resolution</label>
           <input
             type="file"
             name="desktop"
@@ -133,7 +133,7 @@ const UploadForm = ({ onUpload }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">4K Resolution</label>
+          <label className="block text-sm font-medium text-slate-300">4K Resolution</label>
           <input
             type="file"
             name="4k"
