@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [totalDownloads, setTotalDownloads] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showUsersModal, setShowUsersModal] = useState(false);
 
@@ -28,6 +29,7 @@ const Dashboard = () => {
         const dashboardStats = await getDashboardStats();
         setTotalDownloads(dashboardStats.totalDownloads);
         setTotalUsers(dashboardStats.totalUsers);
+        setTotalRevenue(dashboardStats.totalRevenue || 0);
         
         // Fetch wallpapers with their download statistics
         const wallpaperStats = await getWallpaperStats();
@@ -189,7 +191,7 @@ const Dashboard = () => {
         ) : (
           <>
             {/* Stats overview */}
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
               <div className="surface-card overflow-hidden">
                 <div className="px-4 py-5 sm:p-6">
                   <dl>
@@ -204,6 +206,15 @@ const Dashboard = () => {
                   <dl>
                     <dt className="text-sm font-medium text-slate-400 truncate">Total Downloads</dt>
                     <dd className="mt-1 text-3xl font-semibold text-slate-100">{totalDownloads}</dd>
+                  </dl>
+                </div>
+              </div>
+              
+              <div className="surface-card overflow-hidden">
+                <div className="px-4 py-5 sm:p-6">
+                  <dl>
+                    <dt className="text-sm font-medium text-slate-400 truncate">Total Revenue</dt>
+                    <dd className="mt-1 text-3xl font-semibold text-slate-100">₹{totalRevenue.toFixed(2)}</dd>
                   </dl>
                 </div>
               </div>
@@ -234,7 +245,9 @@ const Dashboard = () => {
                       <tr>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Wallpaper</th>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Category</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Price</th>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Downloads</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Revenue</th>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Actions</th>
                       </tr>
                     </thead>
@@ -255,7 +268,13 @@ const Dashboard = () => {
                             <div className="text-sm text-slate-100">{wallpaper.category}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm text-slate-100">{wallpaper.price != null ? `₹${wallpaper.price.toFixed(2)}` : 'Free'}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-slate-100">{wallpaper.downloadCount}</div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-semibold text-green-400">₹{wallpaper.revenue?.toFixed(2) || '0.00'}</div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex space-x-2">

@@ -109,6 +109,9 @@ const Gallery = () => {
                   <div className="px-4 py-5 sm:p-6">
                     <h3 className="text-lg font-medium text-slate-100">{wallpaper.title}</h3>
                     <p className="mt-1 text-sm text-slate-400">{wallpaper.category}</p>
+                    <p className="mt-1 text-sm text-slate-300 font-semibold">
+                      {wallpaper.price != null ? `₹${wallpaper.price.toFixed(2)}` : 'Free'}
+                    </p>
                     {wallpaper.description && (
                       <p className="mt-2 text-sm text-slate-300 line-clamp-2">
                         {wallpaper.description}

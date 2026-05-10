@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getWallpapers } from '../services/wallpaperService';
 import WishlistButton from '../components/WishlistButton';
+import PaymentModal from '../components/PaymentModal';
 import { useAuth } from '../context/AuthContext';
 import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -62,6 +63,8 @@ const Home = () => {
   const [loadingMore, setLoadingMore] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentWallpaper, setPaymentWallpaper] = useState(null);
   const wallpapersPerPage = isMobile ? 8 : 16;
   const navigate = useNavigate();
 
@@ -152,45 +155,40 @@ const Home = () => {
 
   const handleDownload = async (url, title, wallpaperId, e) => {
     if (e) e.stopPropagation();
-    
+
     // Check if user is logged in
     if (!user) {
       setShowLoginPrompt(true);
       return;
     }
-    
+
     try {
+      // Track download in backend (this will check for payment)
+      const response = await api.post(`/api/wallpapers/${wallpaperId}/download`);
+
       // Show downloading feedback
       const notification = document.createElement('div');
       notification.className = 'fixed bottom-4 right-4 bg-primary-600 text-white px-4 py-2 rounded-md shadow-lg z-50';
       notification.textContent = `Downloading ${title}...`;
       document.body.appendChild(notification);
-      
-      // Track download in backend
-      try {
-        await api.post(`/api/wallpapers/${wallpaperId}/download`);
-      } catch (error) {
-        console.error('Failed to track download:', error);
-        // Continue with download even if tracking fails
-      }
-      
+
       // For images on different domains, fetch the image first
       fetch(url)
         .then(response => response.blob())
         .then(blob => {
           // Create a blob URL from the fetched image
           const blobUrl = window.URL.createObjectURL(blob);
-          
+
           // Create a temporary anchor element
           const link = document.createElement('a');
           link.href = blobUrl;
           link.download = `${title.replace(/\s+/g, '-').toLowerCase()}.jpg`;
           link.style.display = 'none';
           document.body.appendChild(link);
-          
+
           // Trigger click event to start download
           link.click();
-          
+
           // Clean up
           setTimeout(() => {
             window.URL.revokeObjectURL(blobUrl);
@@ -230,6 +228,18 @@ const Home = () => {
         });
     } catch (error) {
       console.error('Download error:', error);
+      
+      // Check if payment is required
+      if (error.response?.status === 402 || error.response?.data?.message?.includes('Payment required')) {
+        // Find the wallpaper details to show in payment modal
+        const wallpaper = wallpapers.find(w => w._id === wallpaperId);
+        if (wallpaper) {
+          setPaymentWallpaper(wallpaper);
+          setShowPaymentModal(true);
+        }
+        return;
+      }
+      
       alert(`Failed to download. Please try again later.`);
     }
   };
@@ -397,9 +407,15 @@ const Home = () => {
                         alt={wallpaper.title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white px-3 py-2 text-sm font-medium">
+                        <div className="flex items-center justify-between">
+                          <span>{wallpaper.title}</span>
+                          <span className="font-semibold">{wallpaper.price != null ? `₹${wallpaper.price.toFixed(2)}` : 'Free'}</span>
+                        </div>
+                      </div>
                       
                       {/* Wishlist Button - show for all users */}
-                      <div onClick={(e) => e.stopPropagation()} className="z-10 absolute bottom-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                      <div onClick={(e) => e.stopPropagation()} className="z-10 absolute top-2 right-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                         <WishlistButton wallpaperId={wallpaper._id} />
                       </div>
 
@@ -474,9 +490,14 @@ const Home = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="text-xl font-bold text-gray-900 dark:text-dark-text-primary mb-1">{selectedWallpaper.title}</h3>
-                      <span className="inline-block px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-sm font-medium">
-                        {selectedWallpaper.category}
-                      </span>
+                      <div className="flex flex-wrap gap-2 items-center mb-2">
+                        <span className="inline-block px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-sm font-medium">
+                          {selectedWallpaper.category}
+                        </span>
+                        <span className="inline-block px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-medium">
+                          {selectedWallpaper.price != null ? `₹${selectedWallpaper.price.toFixed(2)}` : 'Free'}
+                        </span>
+                      </div>
                       {selectedWallpaper.description && (
                         <p className="mt-3 text-gray-600 dark:text-dark-text-secondary">{selectedWallpaper.description}</p>
                       )}
@@ -506,6 +527,17 @@ const Home = () => {
           onCancel={handleCancelLogin}
           show={showLoginPrompt}
         />
+
+        {showPaymentModal && (
+          <PaymentModal
+            wallpaper={paymentWallpaper}
+            onClose={() => setShowPaymentModal(false)}
+            onPaymentSuccess={() => {
+              setShowPaymentModal(false);
+              // Optionally refresh the page or show success message
+            }}
+          />
+        )}
 
         {/* Footer */}
         <footer className="hidden sm:block mt-20 pt-10 border-t border-gray-200 dark:border-dark-border">

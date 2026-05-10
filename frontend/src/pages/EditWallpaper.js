@@ -16,6 +16,7 @@ const EditWallpaper = () => {
     title: '',
     description: '',
     category: '',
+    price: '',
     image: null
   });
 
@@ -41,6 +42,7 @@ const EditWallpaper = () => {
           title: wallpaper.title || '',
           description: wallpaper.description || '',
           category: wallpaper.category || '',
+          price: wallpaper.price ?? '',
           image: null
         });
         setPreview(wallpaper.imageUrl);
@@ -92,6 +94,7 @@ const EditWallpaper = () => {
       data.append('category', formData.category);
       
       // Only append image if a new one is selected
+      data.append('price', formData.price);
       if (formData.image) {
         data.append('image', formData.image);
       }
@@ -225,6 +228,22 @@ const EditWallpaper = () => {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary">
+                    Price (USD)
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    id="price"
+                    value={formData.price}
+                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                    required
+                    className="mt-1 block w-full rounded-md border-gray-300 dark:border-dark-border dark:bg-dark-card dark:text-dark-text-primary shadow-sm focus:border-primary-500 focus:ring-primary-500 transition-all duration-200"
+                  />
                 </div>
 
                 <div>

@@ -15,6 +15,12 @@ const wallpaperSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  price: {
+    type: Number,
+    required: true,
+    min: 0,
+    default: 0
+  },
   imageUrl: {
     type: String,
     required: true

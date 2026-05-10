@@ -9,6 +9,7 @@ const Upload = () => {
     title: '',
     description: '',
     category: '',
+    price: '',
     image: null
   });
   const [preview, setPreview] = useState(null);
@@ -56,6 +57,7 @@ const Upload = () => {
       data.append('title', formData.title);
       data.append('description', formData.description);
       data.append('category', formData.category);
+      data.append('price', formData.price);
       data.append('image', formData.image);
 
       await uploadWallpaper(data);
@@ -172,6 +174,23 @@ const Upload = () => {
                   </option>
                 ))}
               </motion.select>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-dark-text-secondary">
+                Price (USD)
+              </label>
+              <motion.input
+                type="number"
+                step="0.01"
+                min="0"
+                id="price"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                required
+                className="mt-1 block w-full rounded-md border-gray-300 dark:border-dark-border dark:bg-dark-card dark:text-dark-text-primary shadow-sm focus:border-primary-500 focus:ring-primary-500 transition-all duration-200"
+                whileFocus={{ scale: 1.01 }}
+              />
             </motion.div>
 
             <motion.div variants={itemVariants}>

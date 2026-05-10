@@ -6,6 +6,7 @@ const { auth, adminAuth } = require('../middleware/auth');
 const Wallpaper = require('../models/Wallpaper');
 const User = require('../models/User');
 const Download = require('../models/Download');
+const Payment = require('../models/Payment');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -80,10 +81,16 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
       resource_type: 'auto'
     });
 
+    const price = parseFloat(req.body.price);
+    if (Number.isNaN(price) || price < 0) {
+      return res.status(400).json({ message: 'Please provide a valid price' });
+    }
+
     const wallpaper = new Wallpaper({
       title: req.body.title,
       description: req.body.description,
       category: req.body.category,
+      price,
       imageUrl: result.secure_url,
       uploadedBy: req.user.id
     });
@@ -115,6 +122,14 @@ router.put('/:id', auth, upload.single('image'), async (req, res) => {
     wallpaper.title = req.body.title;
     wallpaper.description = req.body.description;
     wallpaper.category = req.body.category;
+
+    if (req.body.price !== undefined) {
+      const price = parseFloat(req.body.price);
+      if (Number.isNaN(price) || price < 0) {
+        return res.status(400).json({ message: 'Please provide a valid price' });
+      }
+      wallpaper.price = price;
+    }
 
     // If a new image is provided, upload it to Cloudinary
     if (req.file) {
@@ -226,18 +241,36 @@ router.delete('/:id/wishlist', auth, async (req, res) => {
 });
 
 // Track wallpaper download
-router.post('/:id/download', async (req, res) => {
+router.post('/:id/download', auth, async (req, res) => {
   try {
     const wallpaper = await Wallpaper.findById(req.params.id);
     if (!wallpaper) {
       return res.status(404).json({ message: 'Wallpaper not found' });
     }
 
+    // Check if wallpaper requires payment
+    if (wallpaper.price && wallpaper.price > 0) {
+      // Check if user has paid for this wallpaper
+      const payment = await Payment.findOne({
+        user: req.user.id,
+        wallpaper: wallpaper._id,
+        status: 'completed'
+      });
+
+      if (!payment) {
+        return res.status(403).json({
+          message: 'Payment required to download this wallpaper',
+          requiresPayment: true,
+          price: wallpaper.price
+        });
+      }
+    }
+
     // Create download record
     const download = new Download({
       wallpaper: wallpaper._id,
-      user: req.user ? req.user.id : null, // If user is logged in, track their ID
-      ipAddress: req.ip || req.connection.remoteAddress // Track IP for anonymous users
+      user: req.user.id,
+      ipAddress: req.ip || req.connection.remoteAddress
     });
 
     await download.save();
@@ -246,7 +279,10 @@ router.post('/:id/download', async (req, res) => {
     wallpaper.downloadCount += 1;
     await wallpaper.save();
 
-    res.json({ message: 'Download recorded successfully' });
+    res.json({
+      message: 'Download recorded successfully',
+      downloadUrl: wallpaper.imageUrl
+    });
   } catch (error) {
     console.error('Download tracking error:', error);
     res.status(500).json({ message: 'Error recording download' });

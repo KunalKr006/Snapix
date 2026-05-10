@@ -4,6 +4,7 @@ const { auth, adminAuth } = require('../middleware/auth');
 const Wallpaper = require('../models/Wallpaper');
 const Download = require('../models/Download'); // Import Download model
 const User = require('../models/User'); // Import User model
+const Payment = require('../models/Payment'); // Import Payment model
 
 // Admin dashboard data
 router.get('/dashboard', auth, adminAuth, async (req, res) => {
@@ -30,10 +31,19 @@ router.get('/dashboard-stats', auth, adminAuth, async (req, res) => {
     const totalWallpapers = await Wallpaper.countDocuments();
     const totalDownloads = await Download.countDocuments();
 
+    // Calculate actual revenue from completed payments
+    const revenueResult = await Payment.aggregate([
+      { $match: { status: 'completed' } },
+      { $group: { _id: null, sum: { $sum: '$amount' } } }
+    ]);
+
+    const totalRevenue = revenueResult[0]?.sum || 0;
+
     res.json({
       totalUsers,
       totalWallpapers,
-      totalDownloads
+      totalDownloads,
+      totalRevenue
     });
   } catch (error) {
     console.error('Admin dashboard stats error:', error);
@@ -59,13 +69,23 @@ router.get('/wallpaper-stats', auth, adminAuth, async (req, res) => {
         { $count: 'uniqueUsers' }
       ]);
 
+      // Calculate revenue for this wallpaper
+      const revenueResult = await Payment.aggregate([
+        { $match: { wallpaper: wallpaper._id, status: 'completed' } },
+        { $group: { _id: null, sum: { $sum: '$amount' } } }
+      ]);
+
+      const revenue = revenueResult[0]?.sum || 0;
+
       wallpaperStats.push({
         _id: wallpaper._id,
         title: wallpaper.title,
         category: wallpaper.category,
+        price: wallpaper.price ?? 0,
         imageUrl: wallpaper.imageUrl,
-        downloadCount: totalDownloadsForWallpaper, // Use the aggregated count
+        downloadCount: totalDownloadsForWallpaper,
         uniqueUsers: uniqueDownloads.length > 0 ? uniqueDownloads[0].uniqueUsers : 0,
+        revenue: revenue,
       });
     }
 

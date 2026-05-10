@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getWallpaper, removeFromWishlist } from '../services/wallpaperService';
 import WishlistButton from '../components/WishlistButton';
+import PaymentModal from '../components/PaymentModal';
 import { ArrowDownTrayIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../services/api';
@@ -12,6 +13,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedWallpaper, setSelectedWallpaper] = useState(null);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentWallpaper, setPaymentWallpaper] = useState(null);
   const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
@@ -156,6 +159,18 @@ const Profile = () => {
         });
     } catch (error) {
       console.error('Download error:', error);
+      
+      // Check if payment is required
+      if (error.response?.status === 402 || error.response?.data?.message?.includes('Payment required')) {
+        // Find the wallpaper details to show in payment modal
+        const wallpaper = wishlist.find(w => w._id === wallpaperId) || selectedWallpaper;
+        if (wallpaper) {
+          setPaymentWallpaper(wallpaper);
+          setShowPaymentModal(true);
+        }
+        return;
+      }
+      
       alert(`Failed to download. Please try again later.`);
     }
   };
@@ -266,7 +281,10 @@ const Profile = () => {
                   
                   <div className="px-4 py-5 sm:p-6">
                     <h3 className="text-lg font-medium text-gray-900 dark:text-dark-text-primary">{wallpaper.title}</h3>
-                    <p className="mt-1 text-sm text-gray-500 dark:text-dark-text-secondary">{wallpaper.category}</p>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      <p className="text-sm text-gray-500 dark:text-dark-text-secondary">{wallpaper.category}</p>
+                      <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">{wallpaper.price != null ? `₹${wallpaper.price.toFixed(2)}` : 'Free'}</p>
+                    </div>
                     {wallpaper.description && (
                       <p className="mt-2 text-sm text-gray-600 dark:text-dark-text-secondary line-clamp-2">
                         {wallpaper.description}
@@ -315,9 +333,14 @@ const Profile = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-xl font-bold text-gray-900 dark:text-dark-text-primary mb-1">{selectedWallpaper.title}</h3>
-                    <span className="inline-block px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-sm font-medium">
-                      {selectedWallpaper.category}
-                    </span>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className="inline-block px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/20 text-primary-800 dark:text-primary-300 text-sm font-medium">
+                        {selectedWallpaper.category}
+                      </span>
+                      <span className="inline-block px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-medium">
+                        {selectedWallpaper.price != null ? `₹${selectedWallpaper.price.toFixed(2)}` : 'Free'}
+                      </span>
+                    </div>
                     {selectedWallpaper.description && (
                       <p className="mt-3 text-gray-600 dark:text-dark-text-secondary">{selectedWallpaper.description}</p>
                     )}
@@ -340,6 +363,17 @@ const Profile = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {showPaymentModal && (
+        <PaymentModal
+          wallpaper={paymentWallpaper}
+          onClose={() => setShowPaymentModal(false)}
+          onPaymentSuccess={() => {
+            setShowPaymentModal(false);
+            // Optionally refresh the page or show success message
+          }}
+        />
+      )}
     </div>
   );
 };
